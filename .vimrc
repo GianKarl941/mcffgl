@@ -82,4 +82,4 @@ set foldmethod=indent
 set background=dark
 
 " colorschemes for vim/nvim
-colorscheme solarized
+colorscheme desert
