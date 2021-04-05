@@ -45,8 +45,8 @@ A.  After setting up your git
     7. Then lastly, push your files to GitHub and see if
     that works.
 
-        git push -u -f origin master    or
-        git push -u origin master
+        $ git push -u -f origin master    or
+        $ git push -u origin master
 
 
 
@@ -57,4 +57,8 @@ B.  What if you want to push your files to the existing
     your GitHub repository. Just make sure that you are
     done modifying your file.
 
-    $ git push
+    $ git add .     or      git add "file_name"
+
+    $ git commot -m 'Cool config'
+
+    $ git push -u -f origin master
