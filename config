@@ -184,7 +184,10 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+
+
 # MY CUSTOM CONFIG
+# Custom Color theme
 
 set $bg-color 	         #2f343f
 set $inactive-bg-color   #2f343f
@@ -199,6 +202,8 @@ client.focused          $bg-color           $bg-color          $text-color      
 client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
 client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
+
+
 
 # shutdown / restart / suspend...
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (CTRL+s) shutdown
@@ -220,8 +225,13 @@ mode "$mode_system" {
 
 bindsym $mod+BackSpace mode "$mode_system"
 
+
+
 # OSX-like area selection screenshots
 bindsym --release $mod+Shift+s exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`' # Area selection
+
+
+
 
 # i3-gaps at startup
 gaps inner 5
@@ -248,30 +258,37 @@ bindsym $mod + Shift + z	gaps outer current minus 5
 # finds out, if available)
 bar {
         status_command i3status
-	# MY CUSTOM CONFIG
+	    # MY CUSTOM CONFIG
     
-	position top
+	    position top
 		
-	colors {
-		background $bg-color
+	    colors {
+		    background $bg-color
 	    	separator #757575
-		#                  border             background         text
-		focused_workspace  $bg-color          $bg-color          $text-color
-		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+		    #                  border             background         text
+		    focused_workspace  $bg-color          $bg-color          $text-color
+		    inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		    urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
 	}
 
 }
 
 # MY CUSTOM CONFIG
 
+
+# My i3lock bindings
 bindsym $mod+shift+x exec i3lock --image /home/giankarl/Pictures/watson-amelia.png
 
+
+# shortcut keys for used applications
 bindsym $mod+b exec brave-browser
 
 bindsym $mod+p exec pcmanfm
 
 bindsym $mod+shift+p exec pavucontrol-qt
+
+
+# Run on startup
 
 exec_always feh --bg-scale /home/giankarl/Pictures/watson-amelia-virtual-youtuber_3840x2160.jpg
 
