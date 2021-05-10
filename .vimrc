@@ -33,15 +33,6 @@ set autowrite
 "# filetype and syntax highlighting #
 "####################################
 
-" base highlighting
-set syntax=vim
-
-" html highlighting
-set syntax=html
-
-" markdown highlighting
-set syntax=markdown
-
 " Enable use of the mouse for all modes
 if has('mouse')
       set mouse=a
@@ -60,7 +51,11 @@ set term=xterm-256color
 " alias for 'term'
 set tty=xterm-256color
 
+if !has('gui_running')
+  set t_Co=256
+endif
 
+set laststatus=2
 set showcmd
 set expandtab
 set guicursor=
@@ -74,7 +69,7 @@ set scrolloff=8
 set termguicolors
 set signcolumn=yes
 set colorcolumn=80
-
+set noshowmode
 
 " quicker window switching 
 nnoremap <C-h> <C-w>h 
@@ -88,8 +83,8 @@ nnoremap <C-S-Right> <C-w>>
 nnoremap <C-S-Up> <C-w>+ 
 nnoremap <C-S-Down> <C-w>-
 
-" show the editing mode on the last line              
-set showmode
+" Don't show the editing mode on the last line              
+set noshowmode
 
 " Display height for command window
 set cmdheight=1
@@ -113,7 +108,7 @@ set foldmethod=manual
 set background=dark
 
 " colorschemes for vim/nvim
-colorscheme evening
+colorscheme desert
 
 
 
@@ -128,6 +123,41 @@ Plug 'dhruvasagar/vim-table-mode', { 'for': ['md', 'markdown']}
 " css/less/sass/html color preview for vim. https://github.com/gko/vim-coloresque
 Plug 'gorodinskiy/vim-coloresque'
 
+" Lightline vim for the status bar
+Plug 'itchyny/lightline.vim'
+" dependecies tpope/vim-fugitive
+Plug 'tpope/vim-fugitive'
+
+
 call plug#end()
+
+
+
+" VIM table mode configuration
+function! s:isAtStartOfLine(mapping)
+  let text_before_cursor = getline('.')[0 : col('.')-1]
+  let mapping_pattern = '\V' . escape(a:mapping, '\')
+  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+endfunction
+
+inoreabbrev <expr> <bar><bar>
+          \ <SID>isAtStartOfLine('\|\|') ?
+          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+inoreabbrev <expr> __
+          \ <SID>isAtStartOfLine('__') ?
+          \ '<c-o>:silent! TableModeDisable<cr>' : '__'
+
+" lightline vim
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
 
 
