@@ -8,11 +8,11 @@ set $mod Mod4
 
 # Setting up for the theme of i3wm
 
-set $bg-color            #2f343f
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
-set $inactive-text-color #676E7D
-set $urgent-bg-color     #E53935
+set $bg-color            #282828
+set $inactive-bg-color   #504945
+set $text-color          #ebdbb2
+set $inactive-text-color #a89984
+set $urgent-bg-color     #fb4834
 
 # window colors                                                                 
 #                       border              background         text                 indicator 198 client.focused          $bg-color           $bg-color          $text-color          #00ff00 199 client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00 200 client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00 201 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00 
@@ -22,18 +22,18 @@ client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-col
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
 
 #i3-gaps at startup
-gaps inner 10
-gaps outer 10
+gaps inner 5 
+gaps outer 5 
 
 #Basic startup for i3-gaps
-exec_always feh --bg-scale /home/giankarl/Pictures/watson-amelia-virtual-youtuber_3840x2160.jpg
+exec_always feh --bg-scale /home/giankarl/Pictures/ayame_nakiri.jpg
 
 exec compton
 
 exec pcmanfm -d
 
 # Font for everything (except for the applications itself)
-font pango:DejaVu Sans 10.3
+font pango: terminus medium 14
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -48,16 +48,20 @@ exec --no-startup-id nm-applet
 #bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 #bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
+# Size of the title bar for every windows open
+ default_border pixel 3 
+# default_floating_border pixel 10
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec kitty -c=/home/giankarl/.config/kitty/kitty.conf 
+bindsym $mod+Return exec terminator 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec --no-startup-id dmenu_run -fn 'sans-13'
 
 # change focus
 bindsym $mod+h focus left
@@ -102,12 +106,6 @@ bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-#bindsym $mod+a focus parent
-
-# focus the child container
-#bindsym $mod+d focus child
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -161,10 +159,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym h resize shrink width 5 px or 5 ppt
-        bindsym j resize grow height 5 px or 5 ppt
-        bindsym k resize shrink height 5 px or 5 ppt
-        bindsym l resize grow width 5 px or 5 ppt 
+        bindsym h resize shrink width 1 px or 1 ppt
+        bindsym j resize grow height 1 px or 1 ppt
+        bindsym k resize shrink height 1 px or 1 ppt
+        bindsym l resize grow width 1 px or 1 ppt 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
@@ -184,7 +182,7 @@ set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) re
                                                                                 
                                                                                  
 mode "$mode_system" {                                                           
-     bindsym l exec --no-startup-id $i3lockwall, mode "default"                  
+     bindsym l exec --no-startup-id i3lock --image /home/giankarl/Pictures/watson-amelia.png , mode "default"                  
      bindsym e exec --no-startup-id i3-msg exit, mode "default"                  
      bindsym s exec --no-startup-id $i3lockwall && systemctl suspend, mode "default"
      bindsym h exec --no-startup-id $i3lockwall && systemctl hibernate, mode "default"

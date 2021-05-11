@@ -18,6 +18,9 @@
 " Enabeling syntax highlighting 
 syntax on
 
+" colorscheme for vim/neovim (still need some fixing to make this work)
+colorscheme 
+
 " indenting
 
 set tabstop=4 softtabstop=4
@@ -60,6 +63,7 @@ set showcmd
 set expandtab
 set guicursor=
 set nu
+set relativenumber
 set nohlsearch
 set hidden
 set nowrap
@@ -70,6 +74,7 @@ set termguicolors
 set signcolumn=yes
 set colorcolumn=80
 set noshowmode
+set hidden
 
 " quicker window switching 
 nnoremap <C-h> <C-w>h 
@@ -107,11 +112,6 @@ set foldmethod=manual
 " set to dark background
 set background=dark
 
-" colorschemes for vim/nvim
-colorscheme desert
-
-
-
 
 
 " Initialize plugin system 
@@ -121,7 +121,10 @@ call plug#begin('~/.vim/plugged')
 Plug 'dhruvasagar/vim-table-mode', { 'for': ['md', 'markdown']}
 
 " css/less/sass/html color preview for vim. https://github.com/gko/vim-coloresque
-Plug 'gorodinskiy/vim-coloresque'
+Plug 'gko/vim-coloresque'
+
+" Community Gruvbox
+Plug 'gruvbox-community/gruvbox'
 
 " Lightline vim for the status bar
 Plug 'itchyny/lightline.vim'
@@ -158,6 +161,12 @@ let g:lightline = {
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead'
       \ },
+      \ 
+      \ 'modified': '%M',
+      \ 'paste': '&paste',
+      \
+      \
       \ }
 
-
+" Community Gruvbox
+let g:gruvbox_italic=1
