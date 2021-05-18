@@ -26,14 +26,14 @@ order += "wireless _first_"
 order += "tztime local"
 
 volume master {
-       format = " ♪ %volume "
+       format = " ♬ %volume "
        device = "default"
        mixer = "Master"
        mixer_idx = 0
 }
 
 wireless _first_ {
-        format_up = "%quality  %essid %ip"
+        format_up = " Wifi %quality 🖧"
         format_down = "down"
 }
 
@@ -51,14 +51,14 @@ battery 0 {
     low_threshold = 11
     threshold_type = percentage
     hide_seconds = true
-    status_chr = " "
-    status_bat = " "
-    status_unk = " "
-    status_full = " "
+    status_chr = "|_|"
+    status_bat = "|+|"
+    status_unk = "|=|"
+    status_full = "|#|"
 }
 
 tztime local {
-        format = " %Y, %A, %e, %B   %I:%M:%S:%p"
+        format = "📅 %Y, %A, %e, %B | ⏰ %I:%M:%S:%p"
 }
 
 #load {
@@ -75,5 +75,5 @@ cpu_temperature 0 {
 }
 
 cpu_usage {
-    format = " %usage"
+    format = "⭮ %usage"
 }
