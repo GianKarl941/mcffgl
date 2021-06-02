@@ -15,11 +15,9 @@
 "# you can learn them more by typing into the commands ':option'      #
 "######################################################################
 
-" Enabeling syntax highlighting 
-syntax on
-
-" colorscheme for vim/neovim (still need some fixing to make this work)
-colorscheme 
+" Set background color
+set background=dark
+let g:colors_name="gruvbox"
 
 " indenting
 
@@ -50,8 +48,9 @@ set tgc
 
 " Copy and pasting in Vim to other programs
 vnoremap <C-c> "+y
-vnoremap <C-c> "+p
-
+map <C-p> "+P
+" For copying to both the clipboard and primary selection
+vnoremap <C-c> "*y :let @+=@*<CR>
 
 " name of the used terminal
 set term=xterm-256color
@@ -69,8 +68,6 @@ set laststatus=2
 " Show the commends
 set showcmd
 
-" Expanding the tab
-set expandtab
 
 " Setting up the guicursor
 set guicursor=
@@ -87,18 +84,32 @@ set nohlsearch
 " Hide the status info
 set hidden
 
+" efficient scolling
+set lazyredraw
+
 " disabling wrap
 set nowrap
-set smartcase
+
+" incremental search
+set incsearch
+
+" Set the scrolloff to 8
+set scrolloff=8
+
+" specifies how command line completion works
+set wim=full
 
 " other
-set incsearch
-set scrolloff=8
 set termguicolors
 set signcolumn=yes
 set colorcolumn=80
 set noshowmode
 set hidden
+set nocursorcolumn
+set nocursorline
+set list lcs=tab:\|\ 
+set list
+set lazyredraw
 
 " quicker window switching
 nnoremap <C-h> <C-w>h 
@@ -107,10 +118,10 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l 
   
 " quicker window resize 
-nnoremap <S-Left> <C-w>< 
-nnoremap <S-Right> <C-w>> 
-nnoremap <S-Up> <C-w>+ 
-nnoremap <S-Down> <C-w>-
+nnoremap <S-h> <C-w>< 
+nnoremap <S-j> <C-w>- 
+nnoremap <S-k> <C-w>+ 
+nnoremap <S-l> <C-w>>
 
 " Don't show the editing mode on the last line              
 set noshowmode
@@ -133,9 +144,11 @@ set foldlevelstart=10
 nnoremap <space> za
 set foldmethod=manual
 
-" set to dark background
-set background=dark
+" Word counter
+:map <F3> :w !detex \| wc -w<CR>
 
+" New tab
+nnoremap <silent> <S-t> :tabnew<CR>
 
 
 " Initialize plugin system 
@@ -144,16 +157,21 @@ call plug#begin('~/.vim/plugged')
 " VIM Table Mode for instant table creation. https://github.com/dhruvasagar/vim-table-mode
 Plug 'dhruvasagar/vim-table-mode', { 'for': ['md', 'markdown']}
 
-" css/less/sass/html color preview for vim. https://github.com/gko/vim-coloresque
+" css/less/sass/html color preview for vim. 
 Plug 'gko/vim-coloresque'
 
 " Community Gruvbox
 Plug 'gruvbox-community/gruvbox'
 
+" Asynchronous Lint Engine for vim
+Plug 'dense-analysis/ale'
+
 " Lightline vim for the status bar
 Plug 'itchyny/lightline.vim'
 " dependecies tpope/vim-fugitive
 Plug 'tpope/vim-fugitive'
+" dependencies lightline-ale
+Plug 'maximbaz/lightline-ale'
 
 " File explorer for vim
 Plug 'lambdalisue/fern.vim'
@@ -163,6 +181,10 @@ Plug 'junegunn/goyo.vim'
 
 " Vi-instant-markdown_viewer
 Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown'}
+
+" vim-simple-complete
+Plug 'maxboisvert/vim-simple-complete'
+
 
 call plug#end()
 
@@ -185,7 +207,7 @@ inoreabbrev <expr> __
 
 " lightline vim
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'gruvbox',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -200,9 +222,18 @@ let g:lightline = {
       \
       \ }
 
+let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ]] }
+
+
 
 " Community Gruvbox
 let g:gruvbox_italic=1
+let g:gruvbox_bold=1
+let g:gruvbox_termcolors=1
+
+" Enabeling syntax highlighting 
+syntax on
+
 
 
 
@@ -275,10 +306,6 @@ augroup END
 nnoremap <C-x> :Goyo x48 <CR>
 nnoremap <S-x> :Goyo! <CR>
 
-
-
-
-
 " Configuration for vin-instant-markdown
 
 "Uncomment to override defaults:
@@ -293,3 +320,89 @@ nnoremap <S-x> :Goyo! <CR>
 "let g:instant_markdown_autoscroll = 0
 "let g:instant_markdown_port = 8888
 "let g:instant_markdown_python = 1
+
+" ALE
+
+" keep the sign gutter open
+let g:ale_sign_column_always = 1
+
+" Change the signs in ALE
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
+
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+
+" Show 5 lines of errors (default: 10)
+let g:ale_list_window_size = 5
+
+
+" Lightline-ale
+
+" Register the components
+let g:lightline = {}
+
+let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_infos': 'lightline#ale#infos',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+
+" Set color to the components
+let g:lightline.component_type = {
+      \     'linter_checking': 'right',
+      \     'linter_infos': 'right',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'right',
+      \ }
+
+" VIM Gutter
+
+" vim-gitgutter used to do this by default:
+highlight! link SignColumn LineNr
+
+" or you could do this:
+" highlight SignColumn guibg=whatever ctermbg=whatever
+
+let g:gitgutter_sign_allow_clobber = 1
+
+" turn on line highlighting and line number highlighting by default
+let g:gitgutter_highlight_lines = 1
+let g:gitgutter_highlight_linenrs = 1
+
+" .vim/after/plugin/gitgutter.vim
+autocmd BufWritePost * GitGutter
+
+" vim-simple-complete
+set complete-=t
+set complete-=i
+
+
+" Indenting guidelines configuration for vim
+let g:indentLine_setColors = 1
+
+" Vim
+let g:indentLine_color_term = 239
+
+" GVim
+let g:indentLine_color_gui = '#A4E57E'
+
+" none X terminal
+let g:indentLine_color_tty_light = 7 " (default: 4)
+let g:indentLine_color_dark = 4 " (default: 2)
+
+" Background (Vim, GVim)
+"let g:indentLine_bgcolor_term = 202
+"let g:indentLine_bgcolor_gui = '#FF5F00'
+
+" Change Indent Char
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+
+" Change Conceal Behaviour
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
+
+

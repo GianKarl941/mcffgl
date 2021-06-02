@@ -26,11 +26,9 @@ gaps inner 5
 gaps outer 5 
 
 #Basic startup for i3-gaps
-#exec_always feh --bg-scale /home/giankarl/Pictures/ayame_nakiri.jpg
+exec_always feh --bg-scale /home/giankarl/Pictures/leafs.jpg
 
-#exec compton
-
-#exec pcmanfm -d
+exec compton
 
 # Font for everything (except for the applications itself)
 font pango: terminus medium 14
@@ -50,19 +48,18 @@ exec --no-startup-id nm-applet
 
 # Size of the title bar for every windows open
  default_border pixel 3 
-# default_floating_border pixel 10
+ default_floating_border pixel 3
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-# bindsym $mod+Return exec terminator 
-
+bindsym $mod+Return exec terminator
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run -fn 'sans-13'
+bindsym $mod+d exec --no-startup-id dmenu_run -fn 'terminus-16'
 
 # change focus
 bindsym $mod+h focus left
@@ -186,7 +183,7 @@ mode "$mode_system" {
      bindsym l exec --no-startup-id i3lock --image /home/giankarl/Pictures/watson-amelia.png , mode "default"                  
      bindsym e exec --no-startup-id i3-msg exit, mode "default"                  
      bindsym s exec --no-startup-id $i3lockwall && i3lock --image /home/giankarl/Pictures/watson-amelia.png  && systemctl suspend, mode "default"
-     bindsym h exec --no-startup-id $i3lockwall && i3lock --image /home/giankarl/Pictures/watson-amelia.png  &&systemctl hibernate, mode "default"
+     bindsym h exec --no-startup-id $i3lockwall && i3lock --image /home/giankarl/Pictures/watson-amelia.png  && systemctl hibernate, mode "default"
      bindsym r exec --no-startup-id systemctl reboot, mode "default"             
      bindsym Ctrl+s exec --no-startup-id systemctl poweroff -i, mode "default"   
                                                                                  
@@ -205,7 +202,7 @@ bindsym $mod + Shift + z    gaps outer current minus 2
 bindsym $mod + a            gaps inner current plus 2
 bindsym $mod + Shift + a    gaps inner current minus 2
 
-bindsym $mod+shift+x exec i3lock # --image /home/giankarl/Pictures/watson-amelia.png
+bindsym $mod+shift+x exec i3lock --image /home/giankarl/Pictures/watson-amelia.png
 
 bindsym --release $mod+Shift+s exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`' # Area selection
 
