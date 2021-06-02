@@ -1,3 +1,10 @@
+" ______  ___            ___    ______                             __________________     
+"___   |/  /____  __    __ |  / /__(_)______ _________________    ___  __/__(_)__  /____ 
+"__  /|_/ /__  / / /    __ | / /__  /__  __ `__ \_  ___/  ___/    __  /_ __  /__  /_  _ \
+"_  /  / / _  /_/ /     __ |/ / _  / _  / / / / /  /   / /__      _  __/ _  / _  / /  __/
+"/_/  /_/  _\__, /      _____/  /_/  /_/ /_/ /_//_/    \___/      /_/    /_/  /_/  \___/ 
+"          /____/                                                                        
+
 "#############################################################################
 "# This is my .vimrc file for my text editing workflow                       #
 "# And this will be seperated to the local config and to the                 #
@@ -30,9 +37,9 @@ set autowrite
 
 
 
-"####################################
-"# filetype and syntax highlighting #
-"####################################
+"##########################################
+"# filetype, syntax highlighting and more #
+"##########################################
 
 " Filetype detection
 filetype indent on
@@ -151,6 +158,13 @@ set foldmethod=manual
 nnoremap <silent> <S-t> :tabnew<CR>
 
 
+" _    ___                             __               
+"| |  / (_)___ ___              ____  / /_  ______ _    
+"| | / / / __ `__ \   ______   / __ \/ / / / / __ `/    
+"| |/ / / / / / / /  /_____/  / /_/ / / /_/ / /_/ /     
+"|___/_/_/ /_/ /_/           / .___/_/\__,_/\__, /      
+"                           /_/            /____/       
+
 " Initialize plugin system 
 call plug#begin('~/.vim/plugged')
 
@@ -187,6 +201,19 @@ Plug 'maxboisvert/vim-simple-complete'
 
 
 call plug#end()
+
+"                      __  _                            _    _                      
+"  ___  ___   _ __   / _|(_)  __ _  _   _  _ __  __ _ | |_ (_)  ___   _ __   ___   
+" / __|/ _ \ | '_ \ | |_ | | / _` || | | || '__|/ _` || __|| | / _ \ | '_ \ / __|  
+"| (__| (_) || | | ||  _|| || (_| || |_| || |  | (_| || |_ | || (_) || | | |\__ \  
+" \___|\___/ |_| |_||_|  |_| \__, | \__,_||_|   \__,_| \__||_| \___/ |_| |_||___/  
+"                            |___/                                                                
+" __               _    _                    _                _             
+"/ _|  ___   _ __ | |_ | |__    ___   _ __  | | _   _   __ _ (_) _ __   ___ 
+" |_  / _ \ | '__|| __|| '_ \  / _ \ | '_ \ | || | | | / _` || || '_ \ / __|
+"  _|| (_) || |   | |_ | | | ||  __/ | |_) || || |_| || (_| || || | | |\__ \
+"_|   \___/ |_|    \__||_| |_| \___| | .__/ |_| \__,_| \__, ||_||_| |_||___/
+"                                    |_|               |___/ 
 
 
 
@@ -230,10 +257,6 @@ let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'lint
 let g:gruvbox_italic=1
 let g:gruvbox_bold=1
 let g:gruvbox_termcolors=1
-
-" Enabeling syntax highlighting 
-syntax on
-
 
 
 
@@ -301,10 +324,14 @@ augroup FernGroup
   autocmd FileType fern call FernInit()
 augroup END
 
+
+
 " Configuration for goyo
 
 nnoremap <C-x> :Goyo x48 <CR>
 nnoremap <S-x> :Goyo! <CR>
+
+
 
 " Configuration for vin-instant-markdown
 
@@ -321,6 +348,8 @@ nnoremap <S-x> :Goyo! <CR>
 "let g:instant_markdown_port = 8888
 "let g:instant_markdown_python = 1
 
+
+
 " ALE
 
 " keep the sign gutter open
@@ -335,6 +364,7 @@ highlight clear ALEWarningSign
 
 " Show 5 lines of errors (default: 10)
 let g:ale_list_window_size = 5
+
 
 
 " Lightline-ale
@@ -376,9 +406,13 @@ let g:gitgutter_highlight_linenrs = 1
 " .vim/after/plugin/gitgutter.vim
 autocmd BufWritePost * GitGutter
 
+
+
+
 " vim-simple-complete
 set complete-=t
 set complete-=i
+
 
 
 " Indenting guidelines configuration for vim
