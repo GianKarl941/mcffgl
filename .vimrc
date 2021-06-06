@@ -45,6 +45,10 @@ set autowrite
 filetype indent on
 filetype plugin on
 
+" setup a filetype dictionary for every filetype
+au FileType html,xhtml setl ofu=htmlcomplete#CompletTags
+au FileType css setl ofu=csscomplete#CompleteCSS
+
 " Enable use of the mouse for all modes
 if has('mouse')
       set mouse=a
@@ -112,6 +116,9 @@ set colorcolumn=80
 set nocursorcolumn
 set nocursorline
 set lazyredraw
+set completeopt+=menuone
+set shortmess+=c   " Shut off completion messages
+set omnifunc=1
 
 " display indentation guides
 set list listchars=tab:┊`,trail:·,extends:»,precedes:«,nbsp:×
@@ -206,8 +213,9 @@ Plug 'junegunn/goyo.vim'
 " Vi-instant-markdown_viewer
 Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown'}
 
-" vim-simple-complete
-Plug 'maxboisvert/vim-simple-complete'
+" flexible autocompletio for vim
+Plug 'lifepillar/vim-mucomplete'
+
 
 
 call plug#end()
@@ -338,8 +346,8 @@ augroup END
 
 " Configuration for goyo
 
-nnoremap <C-x> :Goyo x48 <CR>
-nnoremap <S-x> :Goyo! <CR>
+nnoremap <C-b> :Goyo x48 <CR>
+nnoremap <S-b> :Goyo! <CR>
 
 
 
@@ -366,8 +374,8 @@ let g:instant_markdown_autoscroll = 1
 let g:ale_sign_column_always = 1
 
 " Change the signs in ALE
-let g:ale_sign_error = '>>'
-let g:ale_sign_warning = '--'
+let g:ale_sign_error = '🚫'
+let g:ale_sign_warning = '⚠️'
 
 highlight clear ALEErrorSign
 highlight clear ALEWarningSign
@@ -420,8 +428,8 @@ autocmd BufWritePost * GitGutter
 
 
 " vim-simple-complete
-set complete-=t
-set complete-=i
+let g:mucomplete#enable_auto_at_startup = 1
+
 
 
 
