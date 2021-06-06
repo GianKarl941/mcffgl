@@ -75,7 +75,6 @@ set laststatus=2
 " Show the commends
 set showcmd
 
-
 " Setting up the guicursor
 set guicursor=
 
@@ -110,34 +109,42 @@ set wim=full
 set termguicolors
 set signcolumn=yes
 set colorcolumn=80
-set noshowmode
-set hidden
 set nocursorcolumn
 set nocursorline
-set list lcs=tab:\|\ 
-set list
 set lazyredraw
+
+" display indentation guides
+set list listchars=tab:┊`,trail:·,extends:»,precedes:«,nbsp:×
+
+" convert spaces to tabs when reading file
+autocmd! bufreadpost * set noexpandtab | retab! 4
+
+" convert tabs to spaces before writing file
+autocmd! bufwritepre * set expandtab | retab! 4
+
+" convert spaces to tabs after writing file (to show guides again)
+autocmd! bufwritepost * set noexpandtab | retab! 4
+
+" Higlights the tabs
+" match Search /\%(\_^\s*\)\@<=\%(\%1v\|\%5v\|\%9v\)\s/
 
 " quicker window switching
 nnoremap <C-h> <C-w>h 
 nnoremap <C-j> <C-w>j 
 nnoremap <C-k> <C-w>k 
 nnoremap <C-l> <C-w>l 
-  
+
 " quicker window resize 
 nnoremap <S-h> <C-w>< 
 nnoremap <S-j> <C-w>- 
 nnoremap <S-k> <C-w>+ 
 nnoremap <S-l> <C-w>>
 
-" Don't show the editing mode on the last line              
+" Don't show the editing mode on the last line
 set noshowmode
 
 " Display height for command window
 set cmdheight=1
-
-" Filetype detection
-filetype indent on
 
 " autocomplete commands for you
 set wildmenu
@@ -152,7 +159,7 @@ nnoremap <space> za
 set foldmethod=manual
 
 " Word counter
-:map <F3> :w !detex \| wc -w<CR>
+map <F3> :w !detex \| wc -w<CR>
 
 " New tab
 nnoremap <silent> <S-t> :tabnew<CR>
@@ -179,6 +186,9 @@ Plug 'gruvbox-community/gruvbox'
 
 " Asynchronous Lint Engine for vim
 Plug 'dense-analysis/ale'
+
+" It basically shows the git diff of every lines that you have edited
+Plug 'airblade/vim-gitgutter'
 
 " Lightline vim for the status bar
 Plug 'itchyny/lightline.vim'
@@ -336,15 +346,15 @@ nnoremap <S-x> :Goyo! <CR>
 " Configuration for vin-instant-markdown
 
 "Uncomment to override defaults:
-"let g:instant_markdown_slow = 1
-"let g:instant_markdown_autostart = 0
+let g:instant_markdown_slow = 1
+let g:instant_markdown_autostart = 1
 "let g:instant_markdown_open_to_the_world = 1
 "let g:instant_markdown_allow_unsafe_content = 1
 "let g:instant_markdown_allow_external_content = 0
 "let g:instant_markdown_mathjax = 1
 "let g:instant_markdown_mermaid = 1
 "let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
-"let g:instant_markdown_autoscroll = 0
+let g:instant_markdown_autoscroll = 1
 "let g:instant_markdown_port = 8888
 "let g:instant_markdown_python = 1
 
@@ -416,6 +426,7 @@ set complete-=i
 
 
 " Indenting guidelines configuration for vim
+let g:indent_guides_enable_on_vim_startup=1
 let g:indentLine_setColors = 1
 
 " Vim
