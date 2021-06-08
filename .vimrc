@@ -76,6 +76,9 @@ endif
 " status bar for lightline.vim plugins\
 set laststatus=2
 
+" Format the status line
+" set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+
 " Show the commends
 set showcmd
 
@@ -92,16 +95,25 @@ set relativenumber
 set nohlsearch
 
 " Hide the status info
-set hidden
+" set hidden
 
 " efficient scolling
 set lazyredraw
 
+" Rendering
+set ttyfast
+
 " disabling wrap
 set nowrap
 
+" For regular expressions turn magic on
+set magic
+
 " incremental search
 set incsearch
+
+" ignorecase
+set ignorecase
 
 " Set the scrolloff to 8
 set scrolloff=8
@@ -120,8 +132,11 @@ set completeopt+=menuone
 set shortmess+=c   " Shut off completion messages
 set omnifunc=1
 
+" TODO: Pick a leader key
+let mapleader = ","
+
 " display indentation guides
-set list listchars=tab:┊`,trail:·,extends:»,precedes:«,nbsp:×
+set list listchars=tab:⎹ ,trail:·,extends:»,precedes:«,nbsp:×
 
 " convert spaces to tabs when reading file
 autocmd! bufreadpost * set noexpandtab | retab! 4
@@ -143,9 +158,13 @@ nnoremap <C-l> <C-w>l
 
 " quicker window resize 
 nnoremap <S-h> <C-w>< 
-nnoremap <S-j> <C-w>- 
-nnoremap <S-k> <C-w>+ 
+nnoremap <S-k> <C-w>- 
+nnoremap <S-j> <C-w>+ 
 nnoremap <S-l> <C-w>>
+
+" Move up/down editor lines
+nnoremap j gj
+nnoremap k gk
 
 " Don't show the editing mode on the last line
 set noshowmode
@@ -158,18 +177,42 @@ set wildmenu
 
 " Highlighting similar brackets
 set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
 
 " Code folding 
 set foldenable
 set foldlevelstart=10
 nnoremap <space> za
-set foldmethod=manual
+set foldmethod=indent
+
+" Add a bit extra margin to the left
+set foldcolumn=1
+
 
 " Word counter
 map <F3> :w !detex \| wc -w<CR>
 
+" lamguage
+let $LANG='en' 
+set langmenu=en
+
 " New tab
 nnoremap <silent> <S-t> :tabnew<CR>
+nnoremap <silent> <C-c> :tabclose<CR>
+
+" Shortcut for switching to different tabs
+nnoremap <S-p> <C-PageDown>
+nnoremap <S-l> <C-PageUp>
+
+" Shows the Tableines
+set showtabline=2
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
 
 
 " _    ___                             __               
@@ -185,11 +228,21 @@ call plug#begin('~/.vim/plugged')
 " VIM Table Mode for instant table creation. https://github.com/dhruvasagar/vim-table-mode
 Plug 'dhruvasagar/vim-table-mode', { 'for': ['md', 'markdown']}
 
-" css/less/sass/html color preview for vim. 
-Plug 'gko/vim-coloresque'
+" rgb, hex, hsl, etc. color preview in vim
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
 " Community Gruvbox
 Plug 'gruvbox-community/gruvbox'
+
+" deoplete for auto-completion
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
 
 " Asynchronous Lint Engine for vim
 Plug 'dense-analysis/ale'
@@ -197,26 +250,16 @@ Plug 'dense-analysis/ale'
 " It basically shows the git diff of every lines that you have edited
 Plug 'airblade/vim-gitgutter'
 
-" Lightline vim for the status bar
-Plug 'itchyny/lightline.vim'
+" Add a nice bling to vim
+Plug 'vim-airline/vim-airline'
+
 " dependecies tpope/vim-fugitive
 Plug 'tpope/vim-fugitive'
-" dependencies lightline-ale
-Plug 'maximbaz/lightline-ale'
 
 " File explorer for vim
 Plug 'lambdalisue/fern.vim'
 
 " Centering text in vim
-Plug 'junegunn/goyo.vim'
-
-" Vi-instant-markdown_viewer
-Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown'}
-
-" flexible autocompletio for vim
-Plug 'lifepillar/vim-mucomplete'
-
-
 
 call plug#end()
 
@@ -232,6 +275,14 @@ call plug#end()
 "  _|| (_) || |   | |_ | | | ||  __/ | |_) || || |_| || (_| || || | | |\__ \
 "_|   \___/ |_|    \__||_| |_| \___| | .__/ |_| \__,_| \__, ||_||_| |_||___/
 "                                    |_|               |___/ 
+
+" vim-airline
+let g:airline#extensions#tabline#enabled = 1
+
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+let g:airline#extensions#tabline#formatter = 'default'
 
 
 
@@ -249,25 +300,6 @@ inoreabbrev <expr> <bar><bar>
 inoreabbrev <expr> __
           \ <SID>isAtStartOfLine('__') ?
           \ '<c-o>:silent! TableModeDisable<cr>' : '__'
-
-" lightline vim
-let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
-      \ },
-      \ 
-      \ 'modified': '%M',
-      \ 'paste': '&paste',
-      \
-      \
-      \ }
-
-let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ]] }
 
 
 
@@ -385,28 +417,6 @@ let g:ale_list_window_size = 5
 
 
 
-" Lightline-ale
-
-" Register the components
-let g:lightline = {}
-
-let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_infos': 'lightline#ale#infos',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
-      \ }
-
-" Set color to the components
-let g:lightline.component_type = {
-      \     'linter_checking': 'right',
-      \     'linter_infos': 'right',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'right',
-      \ }
-
 " VIM Gutter
 
 " vim-gitgutter used to do this by default:
@@ -418,44 +428,78 @@ highlight! link SignColumn LineNr
 let g:gitgutter_sign_allow_clobber = 1
 
 " turn on line highlighting and line number highlighting by default
-let g:gitgutter_highlight_lines = 1
+" let g:gitgutter_highlight_lines = 1
 let g:gitgutter_highlight_linenrs = 1
 
 " .vim/after/plugin/gitgutter.vim
 autocmd BufWritePost * GitGutter
 
+" Set this. Airline will handle the rest.
+let g:airline#extensions#ale#enabled = 1
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? 'OK' : printf(
+    \   '%dW %dE',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+
+set statusline=%{LinterStatus()}
 
 
 
-" vim-simple-complete
-let g:mucomplete#enable_auto_at_startup = 1
+" deoplete
+
+" Set a single option
+    call deoplete#custom#option('auto_complete_delay', 200)
+
+    " Pass a dictionary to set multiple options
+    call deoplete#custom#option({
+    \ 'auto_complete_delay': 200,
+    \ 'smart_case': v:true,
+    \ })
 
 
+" rgb, hex, hsl, etc. color preview in vim
 
+" :HexokinaseTurnOn
 
-" Indenting guidelines configuration for vim
-let g:indent_guides_enable_on_vim_startup=1
-let g:indentLine_setColors = 1
+" Neovim default
+" let g:Hexokinase_highlighters = [ 'virtual' ]
 
-" Vim
-let g:indentLine_color_term = 239
+" Vim default
+let g:Hexokinase_highlighters = [ 'sign_column' ]
 
-" GVim
-let g:indentLine_color_gui = '#A4E57E'
+" All possible highlighters
+let g:Hexokinase_highlighters = [
+\   'foregroundfull'
+\ ]
 
-" none X terminal
-let g:indentLine_color_tty_light = 7 " (default: 4)
-let g:indentLine_color_dark = 4 " (default: 2)
+" Patterns to match for all filetypes
+" Can be a comma separated string or a list of strings
+" Default value:
+let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
 
-" Background (Vim, GVim)
-"let g:indentLine_bgcolor_term = 202
-"let g:indentLine_bgcolor_gui = '#FF5F00'
+" All possible values
+let g:Hexokinase_optInPatterns = [
+\     'full_hex',
+\     'triple_hex',
+\     'rgb',
+\     'rgba',
+\     'hsl',
+\     'hsla',
+\     'colour_names'
+\ ]
 
-" Change Indent Char
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-
-" Change Conceal Behaviour
-let g:indentLine_concealcursor = 'inc'
-let g:indentLine_conceallevel = 2
-
+" Filetype specific patterns to match
+" entry value must be comma seperated list
+let g:Hexokinase_ftOptInPatterns = {
+\     'css': 'full_hex,rgb,rgba,hsl,hsla,colour_names',
+\     'html': 'full_hex,rgb,rgba,hsl,hsla,colour_names'
+\ }
 
