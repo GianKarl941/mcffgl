@@ -484,15 +484,32 @@ set statusline=%{LinterStatus()}
 
 " deoplete
 
-" Set a single option
-    call deoplete#custom#option('auto_complete_delay', 200)
-
     " Pass a dictionary to set multiple options
     call deoplete#custom#option({
     \ 'auto_complete_delay': 200,
     \ 'smart_case': v:true,
+    \ 'complete_suffix': v:true,
+    \ 'refresh_backspace': v:true,
     \ })
 
+        call deoplete#custom#option('candidate_marks',
+              \ ['A', 'B', 'C', 'D', 'E'])
+        inoremap <expr>A       pumvisible() ?
+        \ deoplete#insert_candidate(0) : 'A'
+        inoremap <expr>S       pumvisible() ?
+        \ deoplete#insert_candidate(1) : 'B'
+        inoremap <expr>D       pumvisible() ?
+        \ deoplete#insert_candidate(2) : 'C'
+        inoremap <expr>F       pumvisible() ?
+        \ deoplete#insert_candidate(3) : 'D'
+        inoremap <expr>G       pumvisible() ?
+        \ deoplete#insert_candidate(4) : 'E'
+
+" <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function() abort
+      return deoplete#close_popup() . "\<CR>"
+    endfunction
 
 
 " rgb, hex, hsl, etc. color preview in vim

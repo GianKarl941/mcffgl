@@ -1,3 +1,10 @@
+" ______  ___            ___    ______                             __________________     
+"___   |/  /____  __    __ |  / /__(_)______ _________________    ___  __/__(_)__  /____ 
+"__  /|_/ /__  / / /    __ | / /__  /__  __ `__ \_  ___/  ___/    __  /_ __  /__  /_  _ \
+"_  /  / / _  /_/ /     __ |/ / _  / _  / / / / /  /   / /__      _  __/ _  / _  / /  __/
+"/_/  /_/  _\__, /      _____/  /_/  /_/ /_/ /_//_/    \___/      /_/    /_/  /_/  \___/ 
+"          /____/                                                                        
+
 "#############################################################################
 "# This is my .vimrc file for my text editing workflow                       #
 "# And this will be seperated to the local config and to the                 #
@@ -15,65 +22,199 @@
 "# you can learn them more by typing into the commands ':option'      #
 "######################################################################
 
-" Enabeling syntax highlighting 
-syntax on
+" ___  ____ ____ _ ____    ____ ____ ___ ___ _ _  _ ____ ____ 
+" |__] |__| [__  | |       [__  |___  |   |  | |\ | | __ [__  
+" |__] |  | ___] | |___    ___] |___  |   |  | | \| |__] ___] 
+"                                                            
 
-" indenting
+" Set background color
+set background=dark
+let g:colors_name="gruvbox"
 
-set tabstop=4 softtabstop=4
-set shiftwidth=4
-set expandtab
-set smartindent
-set autoindent
+" Filetype detection
+filetype indent on
+filetype plugin on
 
-"####################################
-"# filetype and syntax highlighting #
-"####################################
-
-" base highlighting
-set ft=vim
-set syn=vim
-
-" html highlighting
-set ft=html
-set syn=html
-
-" bash highlighting
-set ft=bash
-set syn=bash
+" setup a filetype dictionary for every filetype
+au FileType html,xhtml setl ofu=htmlcomplete#CompletTags
+au FileType css setl ofu=csscomplete#CompleteCSS
 
 " Enable use of the mouse for all modes
 if has('mouse')
       set mouse=a
   endif
 
+" Set GUI colors for the terminal
+set tgc 
 
-set showcmd
-set expandtab
+" Setting up the guicursor
 set guicursor=
-set nu
-set nohlsearch
-set hidden
-set nowrap
-set smartcase
-set incsearch
-set scrolloff=8
-set termguicolors
-set signcolumn=yes
-set colorcolumn=80
 
+" efficient scolling
+set lazyredraw
+
+" Rendering
+set ttyfast
+
+" Don't exit the buffer when editing a text file
+" set hidden
+
+" For regular expressions turn magic on
+set magic
+
+if !has('gui_running')
+  set t_Co=256
+endif
+
+" #################
+" #filetye options#
+" #################
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+" ###########################
+" #setting up the statusline#
+" ###########################
+
+" Shows the Tableines
+set showtabline=2
+
+" Format the status line
+" set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+
+" Show the commends
+set showcmd
+
+" specifies how command line completion works
+set wim=full
 
 " Display height for command window
 set cmdheight=1
 
-" Filetype detection
-filetype indent on
-
 " autocomplete commands for you
 set wildmenu
 
+" ##########################
+" #Numbering and signcolumn#
+" ##########################
+
+" Set number
+set nu
+
+" Set relative number
+set relativenumber
+
+" Setting up the basic sign column
+set signcolumn=yes
+
+" Highlight the vertical column to 80
+set colorcolumn=80
+
+" NOTE: Setting these options may slow your cpu performance while editing
+" text
+
+" Veriical column
+set nocursorcolumn
+
+" Horizontal column
+set nocursorline
+
 " Highlighting similar brackets
 set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
+
+" Add a bit extra margin to the left
+set foldcolumn=1
+
+" #################
+" #Search settings#
+" #################
+
+" incremental search
+set incsearch
+
+" ignorecase
+set ignorecase
+
+" No highlight search
+set nohlsearch
+
+" #################
+" #Text formatting#
+" #################
+
+" disabling wrap
+set nowrap
+
+" Set the scrolloff to 8
+set scrolloff=8
+
+" Setting up omnifunc
+set omnifunc=1
+
+" ############################################
+" #Indents, tabstop, and indenting guidelines#
+" ############################################
+
+set tabstop=4 
+set shiftwidth=4
+set expandtab
+set smartindent
+set autoindent
+set autowrite
+
+" display indentation guides
+ set list listchars=tab:⎹ ,trail:·,extends:»,precedes:«,nbsp:×
+
+" convert spaces to tabs when reading file
+ autocmd! bufreadpost * set noexpandtab | retab! 4
+
+" convert tabs to spaces before writing file
+ autocmd! bufwritepre * set expandtab | retab! 4
+
+" convert spaces to tabs after writing file (to show guides again)
+ autocmd! bufwritepost * set noexpandtab | retab! 4
+
+" Higlights the tabs
+" match Search /\%(\_^\s*\)\@<=\%(\%1v\|\%5v\|\%9v\)\s/
+
+" ###################
+" #Basic keymappings#
+" ###################
+
+" Pick a leader key
+let mapleader = ","
+
+" quicker window switching
+nnoremap <C-h> <C-w>h 
+nnoremap <C-j> <C-w>j 
+nnoremap <C-k> <C-w>k 
+nnoremap <C-l> <C-w>l 
+
+" quicker window resize 
+nnoremap <S-h> <C-w>< 
+nnoremap <S-k> <C-w>- 
+nnoremap <S-j> <C-w>+ 
+nnoremap <S-l> <C-w>>
+
+" Move up/down editor lines
+nnoremap j gj
+nnoremap k gk
+
+" Copy and pasting in Vim to other programs
+vnoremap <C-c> "+y
+map <C-p> "+P
+" For copying to both the clipboard and primary selection
+vnoremap <C-c> "*y :let @+=@*<CR>
+
+" ##############
+" #Code folding#
+" ##############
 
 " Code folding 
 set foldenable
@@ -81,103 +222,49 @@ set foldlevelstart=10
 nnoremap <space> za
 set foldmethod=indent
 
-" set to dark background
-set background=dark
+" ####################
+" #Language and words#
+" ####################
 
-" colorschemes for vim/nvim
-colorscheme evening 
+" Word counter
+map <F3> :w !detex \| wc -w<CR>
 
+" lamguage
+let $LANG='en' 
+set langmenu=en
 
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+" ##################
+" #Tab files in vim#
+" ##################
 
-" Window splitting / movement
+" New tab
+nnoremap <silent> <S-t> :tabnew<CR>
+nnoremap <silent> <C-c> :tabclose<CR>
 
-function! WinMove(key)
-    let t:curwin = winnr()
-    exec "wincmd ".a:key
-    if (t:curwin == winnr())
-        if (match(a:key,'[jk]'))
-            wincmd v
-        else
-            wincmd s
-        endif
-        exec "wincmd ".a:key
-    endif
-endfunction
+" Shortcut for switching to different tabs
+nnoremap <S-p> <C-PageDown>
+nnoremap <S-l> <C-PageUp>
 
-nnoremap <silent> <C-h> :call WinMove('h')<CR>
-nnoremap <silent> <C-j> :call WinMove('j')<CR>
-nnoremap <silent> <C-k> :call WinMove('k')<CR>
-nnoremap <silent> <C-l> :call WinMove('l')<CR>
+" _    ___                             __               
+"| |  / (_)___ ___              ____  / /_  ______ _    
+"| | / / / __ `__ \   ______   / __ \/ / / / / __ `/    
+"| |/ / / / / / / /  /_____/  / /_/ / / /_/ / /_/ /     
+"|___/_/_/ /_/ /_/           / .___/_/\__,_/\__, /      
+"                           /_/            /____/       
 
-
-
-"###############################################################
-"# \       / _______  | __  __        |___  ||           ___   #
-"#  \     /     |     |/  \/  \       |   \ ||  |    |  /   \| #
-"#   \   /      |     |   ||  |  ___  |___/ ||  |    | |     | #
-"#    \ /       |     |   ||  | |___| |     ||  |    |  \___/| #
-"#     V     ___|___  |   ||  |       |     ||   \__/      | | #
-"#                                                         | | #
-"#                                                        /_/  #
-"###############################################################                                                                    
-
-
-" Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
-" - Avoid using standard Vim directory names like 'plugin'
+" Initialize plugin system 
 call plug#begin('~/.vim/plugged')
 
-" Make sure you use single quotes
+" VIM Table Mode for instant table creation. https://github.com/dhruvasagar/vim-table-mode
+Plug 'dhruvasagar/vim-table-mode', { 'for': ['md', 'markdown']}
 
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-Plug 'junegunn/vim-easy-align'
+" rgb, hex, hsl, etc. color preview in vim
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
-" Any valid git URL is allowed
-Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+" Community Gruvbox
+Plug 'gruvbox-community/gruvbox'
 
-" Multiple Plug commands can be written in a single line using | separators
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-" On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-
-" Using a non-default branch
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-
-" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-Plug 'fatih/vim-go', { 'tag': '*' }
-
-" Plugin options
-Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
-
-" Plugin outside ~/.vim/plugged with post-update hook
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
-" Unmanaged plugin (manually installed and updated)
-Plug '~/my-prototype-plugin'
-
-" Initialize plugin system
-
-
-
-" My Installed Plugins
-
-"Auto Pairs
-
-Plug 'jiangmiao/auto-pairs'
-Plug 'machakann/vim-sandwich'
-
-" Deoplete
-
+" deoplete for auto-completion
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -187,78 +274,273 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 
-" NERDtree
+" Asynchronous Lint Engine for vim
+Plug 'dense-analysis/ale'
 
-Plug 'preservim/nerdtree'
+" It basically shows the git diff of every lines that you have edited
+Plug 'airblade/vim-gitgutter'
 
-" Vim denite
+" Add a nice bling to vim
+Plug 'vim-airline/vim-airline'
 
-if has('nvim')
-  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/denite.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+" dependecies tpope/vim-fugitive
+Plug 'tpope/vim-fugitive'
+
+" File explorer for vim
+Plug 'lambdalisue/fern.vim'
+
+" Centering text in vim
 
 call plug#end()
 
-
-" Config of NERDtree
-
-
-
-" key mappings
-
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
-
-" Start NERDTree and leave the cursor in it.
-autocmd VimEnter * NERDTree | wincmd p
-
-" Exit Vim if NERDTree is the only window left.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-            \ quit | endif
+"___  _    _  _ _  _ ____ _ _  _    ____ ____ ___ ___ _ _  _ ____ . ____ 
+"|__] |    |  | |\ | | __ | |\ |    [__  |___  |   |  | |\ | | __ ' [__  
+"|    |___ |__| | \| |__] | | \|    ___] |___  |   |  | | \| |__]   ___] 
+"                                                                        
 
 
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1                                                     
-                                                                                                                                                       
-" Pass a dictionary to set multiple options                                                                                                      
-call deoplete#custom#option({                                                                                                                    
-\ 'auto_complete_delay': 200,                                                                                                                    
-\ 'camel_case': v:true, 
-\ 'omni_patterns': {}, 
-\ 'refresh_backspace': v:true, 
-\ 'ignore_case': v:true})
+" vim-airline
+let g:airline#extensions#tabline#enabled = 1
 
-set completeopt+=noselect                                                                                             
-call deoplete#custom#option('omni_patterns', {                                                                        
-\ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],                                                                        
-\ 'java': '[^. *\t]\.\w*',                                                                                            
-\ 'html': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],                                                                       
-\ 'xhtml': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],                                                                      
-\ 'xml': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],                                                                        
-\})
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+let g:airline#extensions#tabline#formatter = 'default'
 
 
-" denite.vim
 
-" Define mappings
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> d
-  \ denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p
-  \ denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> q
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> i
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <Space>
-  \ denite#do_map('toggle_select').'j'
+" VIM table mode configuration
+function! s:isAtStartOfLine(mapping)
+  let text_before_cursor = getline('.')[0 : col('.')-1]
+  let mapping_pattern = '\V' . escape(a:mapping, '\')
+  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
 endfunction
+
+inoreabbrev <expr> <bar><bar>
+          \ <SID>isAtStartOfLine('\|\|') ?
+          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+inoreabbrev <expr> __
+          \ <SID>isAtStartOfLine('__') ?
+          \ '<c-o>:silent! TableModeDisable<cr>' : '__'
+
+
+
+" Community Gruvbox
+let g:gruvbox_italic=1
+let g:gruvbox_bold=1
+let g:gruvbox_termcolors=1
+
+
+
+" fern.vim file explorer
+function! s:init_fern() abort
+  " Use 'select' instead of 'edit' for default 'open' action
+  nmap <buffer> <Plug>(fern-action-open) <Plug>(fern-action-open:select)
+endfunction
+
+augroup fern-custom
+  autocmd! *
+  autocmd FileType fern call s:init_fern()
+augroup END
+
+" Disable netrw.
+let g:loaded_netrw  = 1
+let g:loaded_netrwPlugin = 1
+let g:loaded_netrwSettings = 1
+let g:loaded_netrwFileHandlers = 1
+
+augroup my-fern-hijack
+  autocmd!
+  autocmd BufEnter * ++nested call s:hijack_directory()
+augroup END
+
+function! s:hijack_directory() abort
+  let path = expand('%:p')
+  if !isdirectory(path)
+    return
+  endif
+  bwipeout %
+  execute printf('Fern %s', fnameescape(path))
+endfunction
+
+" Custom settings and mappings.
+let g:fern#disable_default_mappings = 0
+
+nnoremap <C-t> :Fern . -drawer -reveal=% -toggle -width=35 <CR>
+
+function! FernInit() abort
+  nmap <buffer><expr>
+        \ <Plug>(fern-my-open-expand-collapse)
+        \ fern#smart#leaf(
+        \   "\<Plug>(fern-action-open:select)",
+        \   "\<Plug>(fern-action-expand)",
+        \   "\<Plug>(fern-action-collapse)",
+        \ )
+  nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
+  nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
+  nmap <buffer> n <Plug>(fern-action-new-path)
+  nmap <buffer> d <Plug>(fern-action-remove)
+  nmap <buffer> m <Plug>(fern-action-move)
+  nmap <buffer> M <Plug>(fern-action-rename)
+  nmap <buffer> h <Plug>(fern-action-hidden-toggle)
+  nmap <buffer> r <Plug>(fern-action-reload)
+  nmap <buffer> k <Plug>(fern-action-mark-toggle)
+  nmap <buffer> b <Plug>(fern-action-open:split)
+  nmap <buffer> v <Plug>(fern-action-open:vsplit)
+  nmap <buffer><nowait> < <Plug>(fern-action-leave)
+  nmap <buffer><nowait> > <Plug>(fern-action-enter)
+endfunction
+
+augroup FernGroup
+  autocmd!
+  autocmd FileType fern call FernInit()
+augroup END
+
+
+
+" Configuration for goyo
+
+nnoremap <C-b> :Goyo x48 <CR>
+nnoremap <S-b> :Goyo! <CR>
+
+
+
+" Configuration for vin-instant-markdown
+
+"Uncomment to override defaults:
+let g:instant_markdown_slow = 1
+let g:instant_markdown_autostart = 1
+"let g:instant_markdown_open_to_the_world = 1
+"let g:instant_markdown_allow_unsafe_content = 1
+"let g:instant_markdown_allow_external_content = 0
+"let g:instant_markdown_mathjax = 1
+"let g:instant_markdown_mermaid = 1
+"let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
+let g:instant_markdown_autoscroll = 1
+"let g:instant_markdown_port = 8888
+"let g:instant_markdown_python = 1
+
+
+
+" ALE
+
+" keep the sign gutter open
+let g:ale_sign_column_always = 1
+
+" Change the signs in ALE
+let g:ale_sign_error = '🚫'
+let g:ale_sign_warning = '⚠️'
+
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+
+" Show 5 lines of errors (default: 10)
+let g:ale_list_window_size = 5
+
+
+
+" VIM Gutter
+
+" vim-gitgutter used to do this by default:
+highlight! link SignColumn LineNr
+
+" or you could do this:
+" highlight SignColumn guibg=whatever ctermbg=whatever
+
+let g:gitgutter_sign_allow_clobber = 1
+
+" turn on line highlighting and line number highlighting by default
+" let g:gitgutter_highlight_lines = 1
+let g:gitgutter_highlight_linenrs = 1
+
+" .vim/after/plugin/gitgutter.vim
+autocmd BufWritePost * GitGutter
+
+" Set this. Airline will handle the rest.
+let g:airline#extensions#ale#enabled = 1
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? 'OK' : printf(
+    \   '%dW %dE',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+
+set statusline=%{LinterStatus()}
+
+
+
+" deoplete
+
+    " Pass a dictionary to set multiple options
+    call deoplete#custom#option({
+    \ 'auto_complete_delay': 200,
+    \ 'smart_case': v:true,
+    \ 'complete_suffix': v:true,
+    \ 'refresh_backspace': v:true,
+    \ })
+
+        call deoplete#custom#option('candidate_marks',
+              \ ['A', 'B', 'C', 'D', 'E'])
+        inoremap <expr>A       pumvisible() ?
+        \ deoplete#insert_candidate(0) : 'A'
+        inoremap <expr>S       pumvisible() ?
+        \ deoplete#insert_candidate(1) : 'B'
+        inoremap <expr>D       pumvisible() ?
+        \ deoplete#insert_candidate(2) : 'C'
+        inoremap <expr>F       pumvisible() ?
+        \ deoplete#insert_candidate(3) : 'D'
+        inoremap <expr>G       pumvisible() ?
+        \ deoplete#insert_candidate(4) : 'E'
+
+" <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function() abort
+      return deoplete#close_popup() . "\<CR>"
+    endfunction
+
+
+" rgb, hex, hsl, etc. color preview in vim
+
+" :HexokinaseTurnOn
+
+" Neovim default
+" let g:Hexokinase_highlighters = [ 'virtual' ]
+
+" Vim default
+let g:Hexokinase_highlighters = [ 'sign_column' ]
+
+" All possible highlighters
+let g:Hexokinase_highlighters = [
+\   'foregroundfull'
+\ ]
+
+" Patterns to match for all filetypes
+" Can be a comma separated string or a list of strings
+" Default value:
+let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
+
+" All possible values
+let g:Hexokinase_optInPatterns = [
+\     'full_hex',
+\     'triple_hex',
+\     'rgb',
+\     'rgba',
+\     'hsl',
+\     'hsla',
+\     'colour_names'
+\ ]
+
+" Filetype specific patterns to match
+" entry value must be comma seperated list
+let g:Hexokinase_ftOptInPatterns = {
+\     'css': 'full_hex,rgb,rgba,hsl,hsla,colour_names',
+\     'html': 'full_hex,rgb,rgba,hsl,hsla,colour_names'
+\ }
+
