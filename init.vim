@@ -169,16 +169,16 @@ set autoindent
 set autowrite
 
 " display indentation guides
- set list listchars=tab:⎹ ,trail:·,extends:»,precedes:«,nbsp:×
+set list listchars=tab:┃ ,trail:·,extends:⇉,precedes:⇇,nbsp:×
 
 " convert spaces to tabs when reading file
- autocmd! bufreadpost * set noexpandtab | retab! 4
+autocmd! bufreadpost * set noexpandtab | retab! 4
 
 " convert tabs to spaces before writing file
- autocmd! bufwritepre * set expandtab | retab! 4
+autocmd! bufwritepre * set expandtab | retab! 4
 
 " convert spaces to tabs after writing file (to show guides again)
- autocmd! bufwritepost * set noexpandtab | retab! 4
+autocmd! bufwritepost * set noexpandtab | retab! 4
 
 " Higlights the tabs
 " match Search /\%(\_^\s*\)\@<=\%(\%1v\|\%5v\|\%9v\)\s/
@@ -242,8 +242,15 @@ nnoremap <silent> <S-t> :tabnew<CR>
 nnoremap <silent> <C-c> :tabclose<CR>
 
 " Shortcut for switching to different tabs
-nnoremap <S-p> <C-PageDown>
-nnoremap <S-l> <C-PageUp>
+nnoremap <S-m> <C-PageDown>
+nnoremap <S-p> <C-PageUp>
+
+" ####################
+" #splitting a window#
+" ####################
+
+" for 18:9 aspect ratio
+set splitbelow splitright
 
 " _    ___                             __               
 "| |  / (_)___ ___              ____  / /_  ______ _    
@@ -263,6 +270,12 @@ Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
 " Community Gruvbox
 Plug 'gruvbox-community/gruvbox'
+
+" Centering the text in vim
+Plug 'junegunn/goyo.vim'
+
+" Bhow the indenting lines in vim
+Plug 'nathanaelkane/vim-indent-guides'
 
 " deoplete for auto-completion
 if has('nvim')
@@ -401,7 +414,7 @@ augroup END
 
 " Configuration for goyo
 
-nnoremap <C-b> :Goyo x48 <CR>
+nnoremap <C-b> :Goyo x58 <CR>
 nnoremap <S-b> :Goyo! <CR>
 
 
@@ -443,19 +456,24 @@ let g:ale_list_window_size = 5
 " VIM Gutter
 
 " vim-gitgutter used to do this by default:
-highlight! link SignColumn LineNr
+" highlight! link SignColumn LineNr
 
 " or you could do this:
 " highlight SignColumn guibg=whatever ctermbg=whatever
 
-let g:gitgutter_sign_allow_clobber = 1
-
 " turn on line highlighting and line number highlighting by default
-" let g:gitgutter_highlight_lines = 1
-let g:gitgutter_highlight_linenrs = 1
+let g:gitgutter_highlight_lines = 0
+let g:gitgutter_highlight_linenrs = 0
 
 " .vim/after/plugin/gitgutter.vim
-autocmd BufWritePost * GitGutter
+ autocmd BufWritePost * GitGutter
+
+let g:gitgutter_sign_added = '➕'
+let g:gitgutter_sign_modified = '✏'
+let g:gitgutter_sign_removed = '✚'
+let g:gitgutter_sign_removed_first_line = '^^'
+let g:gitgutter_sign_removed_above_and_below = '{'
+let g:gitgutter_sign_modified_removed = 'ww'
 
 " Set this. Airline will handle the rest.
 let g:airline#extensions#ale#enabled = 1
@@ -510,15 +528,11 @@ set statusline=%{LinterStatus()}
 
 " :HexokinaseTurnOn
 
-" Neovim default
-" let g:Hexokinase_highlighters = [ 'virtual' ]
-
-" Vim default
-let g:Hexokinase_highlighters = [ 'sign_column' ]
+nnoremap <S-u> :HexokinaseToggle <CR>
 
 " All possible highlighters
 let g:Hexokinase_highlighters = [
-\   'foregroundfull'
+\   'backgroundfull',
 \ ]
 
 " Patterns to match for all filetypes
@@ -543,4 +557,14 @@ let g:Hexokinase_ftOptInPatterns = {
 \     'css': 'full_hex,rgb,rgba,hsl,hsla,colour_names',
 \     'html': 'full_hex,rgb,rgba,hsl,hsla,colour_names'
 \ }
+
+
+
+" indentLines in vim
+
+" let g:indent_guides_enable_on_vim_startup = 1
+
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#3c3836 ctermbg=2
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#282828 ctermbg=2
 

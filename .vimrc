@@ -102,7 +102,7 @@ set wim=full
 set cmdheight=1
 
 " autocomplete commands for you
-set wildmenu
+set wildmenu=longest,list,full
 
 " ##########################
 " #Numbering and signcolumn#
