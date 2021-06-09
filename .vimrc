@@ -22,24 +22,14 @@
 "# you can learn them more by typing into the commands ':option'      #
 "######################################################################
 
+" ___  ____ ____ _ ____    ____ ____ ___ ___ _ _  _ ____ ____ 
+" |__] |__| [__  | |       [__  |___  |   |  | |\ | | __ [__  
+" |__] |  | ___] | |___    ___] |___  |   |  | | \| |__] ___] 
+"                                                            
+
 " Set background color
 set background=dark
 let g:colors_name="gruvbox"
-
-" indenting
-
-set tabstop=4 softtabstop=4
-set shiftwidth=4
-set expandtab
-set smartindent
-set autoindent
-set autowrite
-
-
-
-"##########################################
-"# filetype, syntax highlighting and more #
-"##########################################
 
 " Filetype detection
 filetype indent on
@@ -57,14 +47,23 @@ if has('mouse')
 " Set GUI colors for the terminal
 set tgc 
 
-" Copy and pasting in Vim to other programs
-vnoremap <C-c> "+y
-map <C-p> "+P
-" For copying to both the clipboard and primary selection
-vnoremap <C-c> "*y :let @+=@*<CR>
-
 " name of the used terminal
 set term=xterm-256color
+
+" Setting up the guicursor
+set guicursor=
+
+" efficient scolling
+set lazyredraw
+
+" Rendering
+set ttyfast
+
+" Don't exit the buffer when editing a text file
+" set hidden
+
+" For regular expressions turn magic on
+set magic
 
 " alias for 'term'
 set tty=xterm-256color
@@ -73,8 +72,22 @@ if !has('gui_running')
   set t_Co=256
 endif
 
-" status bar for lightline.vim plugins\
-set laststatus=2
+" #################
+" #filetye options#
+" #################
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+" ###########################
+" #setting up the statusline#
+" ###########################
+
+" Shows the Tableines
+set showtabline=2
 
 " Format the status line
 " set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
@@ -82,8 +95,18 @@ set laststatus=2
 " Show the commends
 set showcmd
 
-" Setting up the guicursor
-set guicursor=
+" specifies how command line completion works
+set wim=full
+
+" Display height for command window
+set cmdheight=1
+
+" autocomplete commands for you
+set wildmenu
+
+" ##########################
+" #Numbering and signcolumn#
+" ##########################
 
 " Set number
 set nu
@@ -91,23 +114,32 @@ set nu
 " Set relative number
 set relativenumber
 
-" No highlight search
-set nohlsearch
+" Setting up the basic sign column
+set signcolumn=yes
 
-" Hide the status info
-" set hidden
+" Highlight the vertical column to 80
+set colorcolumn=80
 
-" efficient scolling
-set lazyredraw
+" NOTE: Setting these options may slow your cpu performance while editing
+" text
 
-" Rendering
-set ttyfast
+" Veriical column
+set nocursorcolumn
 
-" disabling wrap
-set nowrap
+" Horizontal column
+set nocursorline
 
-" For regular expressions turn magic on
-set magic
+" Highlighting similar brackets
+set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
+
+" Add a bit extra margin to the left
+set foldcolumn=1
+
+" #################
+" #Search settings#
+" #################
 
 " incremental search
 set incsearch
@@ -115,40 +147,54 @@ set incsearch
 " ignorecase
 set ignorecase
 
+" No highlight search
+set nohlsearch
+
+" #################
+" #Text formatting#
+" #################
+
+" disabling wrap
+set nowrap
+
 " Set the scrolloff to 8
 set scrolloff=8
 
-" specifies how command line completion works
-set wim=full
-
-" other
-set termguicolors
-set signcolumn=yes
-set colorcolumn=80
-set nocursorcolumn
-set nocursorline
-set lazyredraw
-set completeopt+=menuone
-set shortmess+=c   " Shut off completion messages
+" Setting up omnifunc
 set omnifunc=1
 
-" TODO: Pick a leader key
-let mapleader = ","
+" ############################################
+" #Indents, tabstop, and indenting guidelines#
+" ############################################
+
+set tabstop=4 softtabstop=4
+set shiftwidth=4
+set expandtab
+set smartindent
+set autoindent
+set autowrite
 
 " display indentation guides
-set list listchars=tab:⎹ ,trail:·,extends:»,precedes:«,nbsp:×
+ set list listchars=tab:⎹ ,trail:·,extends:»,precedes:«,nbsp:×
 
 " convert spaces to tabs when reading file
-autocmd! bufreadpost * set noexpandtab | retab! 4
+ autocmd! bufreadpost * set noexpandtab | retab! 4
 
 " convert tabs to spaces before writing file
-autocmd! bufwritepre * set expandtab | retab! 4
+ autocmd! bufwritepre * set expandtab | retab! 4
 
 " convert spaces to tabs after writing file (to show guides again)
-autocmd! bufwritepost * set noexpandtab | retab! 4
+ autocmd! bufwritepost * set noexpandtab | retab! 4
 
 " Higlights the tabs
 " match Search /\%(\_^\s*\)\@<=\%(\%1v\|\%5v\|\%9v\)\s/
+
+" ###################
+" #Basic keymappings#
+" ###################
+
+" Pick a leader key
+let mapleader = ","
 
 " quicker window switching
 nnoremap <C-h> <C-w>h 
@@ -166,19 +212,15 @@ nnoremap <S-l> <C-w>>
 nnoremap j gj
 nnoremap k gk
 
-" Don't show the editing mode on the last line
-set noshowmode
+" Copy and pasting in Vim to other programs
+vnoremap <C-c> "+y
+map <C-p> "+P
+" For copying to both the clipboard and primary selection
+vnoremap <C-c> "*y :let @+=@*<CR>
 
-" Display height for command window
-set cmdheight=1
-
-" autocomplete commands for you
-set wildmenu
-
-" Highlighting similar brackets
-set showmatch
-" How many tenths of a second to blink when matching brackets
-set mat=2
+" ##############
+" #Code folding#
+" ##############
 
 " Code folding 
 set foldenable
@@ -186,9 +228,9 @@ set foldlevelstart=10
 nnoremap <space> za
 set foldmethod=indent
 
-" Add a bit extra margin to the left
-set foldcolumn=1
-
+" ####################
+" #Language and words#
+" ####################
 
 " Word counter
 map <F3> :w !detex \| wc -w<CR>
@@ -197,6 +239,10 @@ map <F3> :w !detex \| wc -w<CR>
 let $LANG='en' 
 set langmenu=en
 
+" ##################
+" #Tab files in vim#
+" ##################
+
 " New tab
 nnoremap <silent> <S-t> :tabnew<CR>
 nnoremap <silent> <C-c> :tabclose<CR>
@@ -204,16 +250,6 @@ nnoremap <silent> <C-c> :tabclose<CR>
 " Shortcut for switching to different tabs
 nnoremap <S-p> <C-PageDown>
 nnoremap <S-l> <C-PageUp>
-
-" Shows the Tableines
-set showtabline=2
-
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
-
-" Use Unix as the standard file type
-set ffs=unix,dos,mac
-
 
 " _    ___                             __               
 "| |  / (_)___ ___              ____  / /_  ______ _    
@@ -263,18 +299,11 @@ Plug 'lambdalisue/fern.vim'
 
 call plug#end()
 
-"                      __  _                            _    _                      
-"  ___  ___   _ __   / _|(_)  __ _  _   _  _ __  __ _ | |_ (_)  ___   _ __   ___   
-" / __|/ _ \ | '_ \ | |_ | | / _` || | | || '__|/ _` || __|| | / _ \ | '_ \ / __|  
-"| (__| (_) || | | ||  _|| || (_| || |_| || |  | (_| || |_ | || (_) || | | |\__ \  
-" \___|\___/ |_| |_||_|  |_| \__, | \__,_||_|   \__,_| \__||_| \___/ |_| |_||___/  
-"                            |___/                                                                
-" __               _    _                    _                _             
-"/ _|  ___   _ __ | |_ | |__    ___   _ __  | | _   _   __ _ (_) _ __   ___ 
-" |_  / _ \ | '__|| __|| '_ \  / _ \ | '_ \ | || | | | / _` || || '_ \ / __|
-"  _|| (_) || |   | |_ | | | ||  __/ | |_) || || |_| || (_| || || | | |\__ \
-"_|   \___/ |_|    \__||_| |_| \___| | .__/ |_| \__,_| \__, ||_||_| |_||___/
-"                                    |_|               |___/ 
+"___  _    _  _ _  _ ____ _ _  _    ____ ____ ___ ___ _ _  _ ____ . ____ 
+"|__] |    |  | |\ | | __ | |\ |    [__  |___  |   |  | |\ | | __ ' [__  
+"|    |___ |__| | \| |__] | | \|    ___] |___  |   |  | | \| |__]   ___] 
+"                                                                        
+
 
 " vim-airline
 let g:airline#extensions#tabline#enabled = 1
@@ -463,6 +492,7 @@ set statusline=%{LinterStatus()}
     \ 'auto_complete_delay': 200,
     \ 'smart_case': v:true,
     \ })
+
 
 
 " rgb, hex, hsl, etc. color preview in vim
