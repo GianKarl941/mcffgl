@@ -25,7 +25,6 @@
 " ___  ____ ____ _ ____    ____ ____ ___ ___ _ _  _ ____ ____ 
 " |__] |__| [__  | |       [__  |___  |   |  | |\ | | __ [__  
 " |__] |  | ___] | |___    ___] |___  |   |  | | \| |__] ___] 
-"                                                            
 
 " Set background color
 set background=dark
@@ -57,7 +56,7 @@ set lazyredraw
 set ttyfast
 
 " Don't exit the buffer when editing a text file
-" set hidden
+set hidden
 
 " For regular expressions turn magic on
 set magic
@@ -75,6 +74,16 @@ set encoding=utf8
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
+
+" for html
+set filetype=html
+
+" for css 
+set filetype=css
+
+" for C++
+set filetype=cpp
+
 
 " ###########################
 " #setting up the statusline#
@@ -157,6 +166,15 @@ set scrolloff=8
 " Setting up omnifunc
 set omnifunc=1
 
+" for html
+set omnifunc=htmlcomplete#CompletTags
+
+" for css 
+set omnifunc=csscomplete#CompleteCSS 
+
+" for C++
+set omnifunc=cpp
+
 " ############################################
 " #Indents, tabstop, and indenting guidelines#
 " ############################################
@@ -233,6 +251,8 @@ map <F3> :w !detex \| wc -w<CR>
 let $LANG='en' 
 set langmenu=en
 
+set spell
+
 " ##################
 " #Tab files in vim#
 " ##################
@@ -249,8 +269,25 @@ nnoremap <S-p> <C-PageUp>
 " #splitting a window#
 " ####################
 
-" for 18:9 aspect ratio
+" for 16:9 aspect ratio
 set splitbelow splitright
+
+" #########################
+" #auto completions in vim#
+" #########################
+
+set complete+=kspell
+set completeopt=menuone,longest,preview
+set shortmess+=c
+
+inoremap <expr> <Down> pumvisible() ? "<C-n>" :"<Down>"
+inoremap <expr> <Up> pumvisible() ? "<C-p>" :"<Up>"
+
+inoremap <expr> <Down> pumvisible() ? "<C-y>" : "<Right>"
+inoremap <expr> <CR> pumvisible() ? "<C-y>" : "<CR>"
+
+inoremap <expr> <Left> pumvisible() ? "<C-y>" :"<Left>"
+
 
 " _    ___                             __               
 "| |  / (_)___ ___              ____  / /_  ______ _    
@@ -469,7 +506,7 @@ let g:gitgutter_highlight_linenrs = 0
  autocmd BufWritePost * GitGutter
 
 let g:gitgutter_sign_added = '➕'
-let g:gitgutter_sign_modified = '✏'
+let g:gitgutter_sign_modified = ' '
 let g:gitgutter_sign_removed = '✚'
 let g:gitgutter_sign_removed_first_line = '^^'
 let g:gitgutter_sign_removed_above_and_below = '{'
@@ -495,15 +532,11 @@ set statusline=%{LinterStatus()}
 
 
 " deoplete
-
     " Pass a dictionary to set multiple options
     call deoplete#custom#option({
     \ 'auto_complete_delay': 200,
-    \ 'smart_case': v:true,
-    \ 'complete_suffix': v:true,
     \ 'refresh_backspace': v:true,
     \ })
-
         call deoplete#custom#option('candidate_marks',
               \ ['A', 'B', 'C', 'D', 'E'])
         inoremap <expr>A       pumvisible() ?
