@@ -38,6 +38,7 @@ filetype plugin on
 au FileType html,xhtml setl ofu=htmlcomplete#CompletTags
 au FileType css setl ofu=csscomplete#CompleteCSS
 
+
 " Enable use of the mouse for all modes
 if has('mouse')
       set mouse=a
@@ -167,13 +168,13 @@ set scrolloff=8
 set omnifunc=1
 
 " for html
-set omnifunc=htmlcomplete#CompletTags
+"set omnifunc=htmlcomplete#CompletTags
 
 " for css 
-set omnifunc=csscomplete#CompleteCSS 
+"set omnifunc=csscomplete#CompleteCSS 
 
 " for C++
-set omnifunc=cpp
+"set omnifunc=omni#cpp#complete#Main
 
 " ############################################
 " #Indents, tabstop, and indenting guidelines#
