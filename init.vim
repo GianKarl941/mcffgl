@@ -34,10 +34,38 @@ let g:colors_name="gruvbox"
 filetype indent on
 filetype plugin on
 
-" setup a filetype dictionary for every filetype
-au FileType html,xhtml setl ofu=htmlcomplete#CompletTags
-au FileType css setl ofu=csscomplete#CompleteCSS
+" configure tags - add additional tags here or comment out not-used ones
+set tags+=~/.vim/tags/cpp
+"set tags+=~/.vim/tags/gl
+"set tags+=~/.vim/tags/sdl
+"set tags+=~/.vim/tags/qt4
+" build tags of your own project with Ctrl-F12
+map <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extras=+q .<CR>
 
+" OmniCppComplete
+let OmniCpp_NamespaceSearch = 1
+let OmniCpp_GlobalScopeSearch = 1
+let OmniCpp_ShowAccess = 1
+let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
+let OmniCpp_MayCompleteDot = 1 " autocomplete after .
+let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
+let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
+let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+" automatically open and close the popup menu / preview window
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+set completeopt=menu,longest,preview
+
+"" MARK
+
+" setup a filetype dictionary for every filetype
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType c set omnifunc=ccomplete#Complete
+" autocmd FileType cpp set omnifunc=omni#cpp#complete#Main
 
 " Enable use of the mouse for all modes
 if has('mouse')
@@ -77,21 +105,20 @@ set encoding=utf8
 set ffs=unix,dos,mac
 
 " for html
-set filetype=html
+"set filetype=html
 
 " for css 
-set filetype=css
+"set filetype=css
 
 " for C++
-set filetype=cpp
-
+"set filetype=cpp
 
 " ###########################
 " #setting up the statusline#
 " ###########################
 
 " Shows the Tableines
-set showtabline=2
+set showtabline=4
 
 " Format the status line
 " set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
@@ -167,6 +194,10 @@ set scrolloff=8
 " Setting up omnifunc
 set omnifunc=1
 
+set completefunc=1
+
+set omnifunc=syntaxcomplete#Complete
+
 " for html
 "set omnifunc=htmlcomplete#CompletTags
 
@@ -210,10 +241,10 @@ autocmd! bufwritepost * set noexpandtab | retab! 4
 let mapleader = ","
 
 " quicker window switching
-nnoremap <C-h> <C-w>h 
-nnoremap <C-j> <C-w>j 
-nnoremap <C-k> <C-w>k 
-nnoremap <C-l> <C-w>l 
+nnoremap <Leader>h <C-w>h 
+nnoremap <Leader>j <C-w>j 
+nnoremap <Leader>k <C-w>k 
+nnoremap <Leader>l <C-w>l 
 
 " quicker window resize 
 nnoremap <S-h> <C-w>< 
@@ -278,7 +309,6 @@ set splitbelow splitright
 " #########################
 
 set complete+=kspell
-set completeopt=menuone,longest,preview
 set shortmess+=c
 
 inoremap <expr> <Down> pumvisible() ? "<C-n>" :"<Down>"
@@ -287,8 +317,29 @@ inoremap <expr> <Up> pumvisible() ? "<C-p>" :"<Up>"
 inoremap <expr> <Down> pumvisible() ? "<C-y>" : "<Right>"
 inoremap <expr> <CR> pumvisible() ? "<C-y>" : "<CR>"
 
-inoremap <expr> <Left> pumvisible() ? "<C-y>" :"<Left>"
+inoremap <expr> <Left> pumvisible() ? "<C-e>" :"<Left>"
 
+
+" ################
+" #Netrw settings#
+" ################
+
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+let g:netrw_browse_split = 3
+let g:netrw_winsize = 30
+let g:netrw_altv = 1
+
+"augroup ProjectDrawer
+"  autocmd!
+"  autocmd VimEnter * :Vexplore
+"augroup END
+
+let g:netrw_keepdir = 0
+let g:netrw_localcopydircmd = 'cp -r'
+
+nnoremap <leader>t :Lexplore %:p:h<CR>
+nnoremap <Leader>T :Lexplore<CR>
 
 " _    ___                             __               
 "| |  / (_)___ ___              ____  / /_  ______ _    
@@ -315,18 +366,11 @@ Plug 'junegunn/goyo.vim'
 " Bhow the indenting lines in vim
 Plug 'nathanaelkane/vim-indent-guides'
 
-" deoplete for auto-completion
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
-
 " Asynchronous Lint Engine for vim
 Plug 'dense-analysis/ale'
+
+" Automatically show vim's built-in autocomplete
+Plug 'vim-scripts/AutoComplPop'
 
 " It basically shows the git diff of every lines that you have edited
 Plug 'airblade/vim-gitgutter'
@@ -337,10 +381,11 @@ Plug 'vim-airline/vim-airline'
 " dependecies tpope/vim-fugitive
 Plug 'tpope/vim-fugitive'
 
-" File explorer for vim
-Plug 'lambdalisue/fern.vim'
+" Startup menu for vim
+Plug 'mhinz/vim-startify'
 
-" Centering text in vim
+" Clang completion in vim
+Plug 'xavierd/clang_complete'
 
 call plug#end()
 
@@ -384,69 +429,6 @@ let g:gruvbox_termcolors=1
 
 
 
-" fern.vim file explorer
-function! s:init_fern() abort
-  " Use 'select' instead of 'edit' for default 'open' action
-  nmap <buffer> <Plug>(fern-action-open) <Plug>(fern-action-open:select)
-endfunction
-
-augroup fern-custom
-  autocmd! *
-  autocmd FileType fern call s:init_fern()
-augroup END
-
-" Disable netrw.
-let g:loaded_netrw  = 1
-let g:loaded_netrwPlugin = 1
-let g:loaded_netrwSettings = 1
-let g:loaded_netrwFileHandlers = 1
-
-augroup my-fern-hijack
-  autocmd!
-  autocmd BufEnter * ++nested call s:hijack_directory()
-augroup END
-
-function! s:hijack_directory() abort
-  let path = expand('%:p')
-  if !isdirectory(path)
-    return
-  endif
-  bwipeout %
-  execute printf('Fern %s', fnameescape(path))
-endfunction
-
-" Custom settings and mappings.
-let g:fern#disable_default_mappings = 0
-
-nnoremap <C-t> :Fern . -drawer -reveal=% -toggle -width=35 <CR>
-
-function! FernInit() abort
-  nmap <buffer><expr>
-        \ <Plug>(fern-my-open-expand-collapse)
-        \ fern#smart#leaf(
-        \   "\<Plug>(fern-action-open:select)",
-        \   "\<Plug>(fern-action-expand)",
-        \   "\<Plug>(fern-action-collapse)",
-        \ )
-  nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
-  nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
-  nmap <buffer> n <Plug>(fern-action-new-path)
-  nmap <buffer> d <Plug>(fern-action-remove)
-  nmap <buffer> m <Plug>(fern-action-move)
-  nmap <buffer> M <Plug>(fern-action-rename)
-  nmap <buffer> h <Plug>(fern-action-hidden-toggle)
-  nmap <buffer> r <Plug>(fern-action-reload)
-  nmap <buffer> k <Plug>(fern-action-mark-toggle)
-  nmap <buffer> b <Plug>(fern-action-open:split)
-  nmap <buffer> v <Plug>(fern-action-open:vsplit)
-  nmap <buffer><nowait> < <Plug>(fern-action-leave)
-  nmap <buffer><nowait> > <Plug>(fern-action-enter)
-endfunction
-
-augroup FernGroup
-  autocmd!
-  autocmd FileType fern call FernInit()
-augroup END
 
 
 
@@ -532,30 +514,6 @@ set statusline=%{LinterStatus()}
 
 
 
-" deoplete
-    " Pass a dictionary to set multiple options
-    call deoplete#custom#option({
-    \ 'auto_complete_delay': 200,
-    \ 'refresh_backspace': v:true,
-    \ })
-        call deoplete#custom#option('candidate_marks',
-              \ ['A', 'B', 'C', 'D', 'E'])
-        inoremap <expr>A       pumvisible() ?
-        \ deoplete#insert_candidate(0) : 'A'
-        inoremap <expr>S       pumvisible() ?
-        \ deoplete#insert_candidate(1) : 'B'
-        inoremap <expr>D       pumvisible() ?
-        \ deoplete#insert_candidate(2) : 'C'
-        inoremap <expr>F       pumvisible() ?
-        \ deoplete#insert_candidate(3) : 'D'
-        inoremap <expr>G       pumvisible() ?
-        \ deoplete#insert_candidate(4) : 'E'
-
-" <CR>: close popup and save indent.
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function() abort
-      return deoplete#close_popup() . "\<CR>"
-    endfunction
 
 
 " rgb, hex, hsl, etc. color preview in vim
@@ -601,4 +559,15 @@ let g:Hexokinase_ftOptInPatterns = {
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#3c3836 ctermbg=2
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#282828 ctermbg=2
+
+" Clang stuff
+
+ " path to directory where library can be found
+ let g:clang_library_path='/usr/lib/llvm-3.8/lib'
+ " or path directly to the library file
+ let g:clang_library_path='/usr/lib64/libclang.so.3.8'
+
+ let g:clang_library_path='/usr/lib/llvm3.5/lib/libclang.so.1'
+
+
 
