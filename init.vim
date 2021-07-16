@@ -117,7 +117,7 @@ set ffs=unix,dos,mac
 " #setting up the statusline#
 " ###########################
 
-" Shows the Tableines
+" Shows the Tablines
 set showtabline=4
 
 " Format the status line
@@ -133,7 +133,7 @@ set wim=full
 set cmdheight=1
 
 " autocomplete commands for you
-set wildmenu
+set wildmenu=full
 
 " ##########################
 " #Numbering and signcolumn#
@@ -154,7 +154,7 @@ set colorcolumn=80
 " NOTE: Setting these options may slow your cpu performance while editing
 " text
 
-" Veriical column
+" Vertical column
 set nocursorcolumn
 
 " Horizontal column
@@ -163,10 +163,10 @@ set nocursorline
 " Highlighting similar brackets
 set showmatch
 " How many tenths of a second to blink when matching brackets
-set mat=2
+set matchtime=2
 
 " Add a bit extra margin to the left
-set foldcolumn=1
+set foldcolumn=2
 
 " #################
 " #Search settings#
@@ -192,8 +192,10 @@ set nowrap
 set scrolloff=8
 
 " Setting up omnifunc
-set omnifunc=1
+" set omnifunc=1            // Enable this if ale plugin is not installed
+set omnifunc=ale#completion#OmniFunc
 
+" Setting up completions
 set completefunc=1
 
 set omnifunc=syntaxcomplete#Complete
@@ -327,7 +329,7 @@ inoremap <expr> <Left> pumvisible() ? "<C-e>" :"<Left>"
 let g:netrw_liststyle = 3
 let g:netrw_banner = 0
 let g:netrw_browse_split = 3
-let g:netrw_winsize = 30
+let g:netrw_winsize = 25
 let g:netrw_altv = 1
 
 "augroup ProjectDrawer
@@ -337,6 +339,7 @@ let g:netrw_altv = 1
 
 let g:netrw_keepdir = 0
 let g:netrw_localcopydircmd = 'cp -r'
+" Setting up completions
 
 nnoremap <leader>t :Lexplore %:p:h<CR>
 nnoremap <Leader>T :Lexplore<CR>
@@ -370,7 +373,8 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'dense-analysis/ale'
 
 " Automatically show vim's built-in autocomplete
-Plug 'vim-scripts/AutoComplPop'
+" Plug 'vim-scripts/AutoComplPop'
+Plug 'shougo/deoplete.nvim'
 
 " It basically shows the git diff of every lines that you have edited
 Plug 'airblade/vim-gitgutter'
@@ -458,18 +462,47 @@ let g:instant_markdown_autoscroll = 1
 
 " ALE
 
+" Enable completion where available.
+" This setting must be set before ALE is loaded.
+"
+" You should not turn this setting on if you wish to use ALE as a completion
+" source for other completion plugins, like Deoplete.
+let g:ale_completion_enabled = 1
+let g:ale_completion_autoimport = 1
+
 " keep the sign gutter open
 let g:ale_sign_column_always = 1
 
 " Change the signs in ALE
 let g:ale_sign_error = '🚫'
-let g:ale_sign_warning = '⚠️'
+let g:ale_sign_warning = '❗'
 
 highlight clear ALEErrorSign
 highlight clear ALEWarningSign
 
 " Show 5 lines of errors (default: 10)
 let g:ale_list_window_size = 5
+
+" Set this in your vimrc file to enabling highlighting
+let g:ale_set_highlights = 1
+
+" Use ALE and also some plugin 'foobar' as completion sources for all code.
+call deoplete#custom#option('sources', {
+\ '_': ['ale', 'foobar'],
+\})
+
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+let g:ale_open_list = 1
+" Set this if you want to.
+" This can be useful if you are combining ALE with
+" some other plugin which sets quickfix errors, etc.
+let g:ale_keep_list_window_open = 1
+
+" Floating window boarder
+let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
 
 
 
@@ -490,27 +523,29 @@ let g:gitgutter_highlight_linenrs = 0
 
 let g:gitgutter_sign_added = '➕'
 let g:gitgutter_sign_modified = ' '
-let g:gitgutter_sign_removed = '✚'
-let g:gitgutter_sign_removed_first_line = '^^'
-let g:gitgutter_sign_removed_above_and_below = '{'
-let g:gitgutter_sign_modified_removed = 'ww'
+let g:gitgutter_sign_removed = '⭕'
+let g:gitgutter_sign_removed_first_line = '⏫'
+let g:gitgutter_sign_removed_above_and_below = '↕'
+let g:gitgutter_sign_modified_removed = '❕'
 
 " Set this. Airline will handle the rest.
 let g:airline#extensions#ale#enabled = 1
-function! LinterStatus() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
 
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
+" For non-airline plugin
+"function! LinterStatus() abort
+    "let l:counts = ale#statusline#Count(bufnr(''))
 
-    return l:counts.total == 0 ? 'OK' : printf(
-    \   '%dW %dE',
-    \   all_non_errors,
-    \   all_errors
-    \)
-endfunction
+    "let l:all_errors = l:counts.error + l:counts.style_error
+    "let l:all_non_errors = l:counts.total - l:all_errors
 
-set statusline=%{LinterStatus()}
+    "return l:counts.total == 0 ? 'OK' : printf(
+    "\  '%dW %dE',
+    "\  all_non_errors,
+    "\  all_errors
+    "\)
+"endfunction
+
+"set statusline=%{LinterStatus()}
 
 
 
@@ -569,5 +604,14 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#282828 ctermbg=2
 
  let g:clang_library_path='/usr/lib/llvm3.5/lib/libclang.so.1'
 
+" EXTRAS
 
+" Put these lines at the very end of your vimrc file.
+
+" Load all plugins now.
+" Plugins need to be added to runtimepath before helptags can be generated.
+packloadall
+" Load all of the helptags now, after plugins have been loaded.
+" All messages and errors will be ignored.
+silent! helptags ALL
 
